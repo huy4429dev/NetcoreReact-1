@@ -11,7 +11,7 @@ namespace  ProjectManage.Models
         [Required]
         [MaxLength(255)]
         public string Name{get;set;}
-        // public ICollection<Task> Tasks{get; set;}
+        public ICollection<Task> Tasks{get; set;}
         // public ICollection<Project> Projects {get;set;}
     }
 }

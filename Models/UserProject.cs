@@ -10,18 +10,16 @@ namespace ProjectManage.Models
         [Key]
         public int Id{get;set;}
         [Required]
+        public int UserId{get;set;}
+        public User User{get;set;}
 
-        public string UserId{get;set;}
         [Required]
-        // public ApplicationUser User{get;set;}
-
         public int ProjectId{get;set;}
-        // public Project Project{get;set;}
-
+        public Project Project{get;set;}
         public DateTime CreatedAt{get;set;}
         public DateTime UpdatedAt{get;set;}
 
-
+            
 
     }
 }

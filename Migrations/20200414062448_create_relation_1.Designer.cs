@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ProjectManage.Data;
@@ -9,9 +10,10 @@ using ProjectManage.Data;
 namespace ProjectManage.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200414062448_create_relation_1")]
+    partial class create_relation_1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -75,16 +77,15 @@ namespace ProjectManage.Migrations
                     b.Property<int>("StatusId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Thumbnail")
-                        .HasColumnType("text");
-
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp without time zone");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ManagerId")
-                        .IsUnique();
+                    b.HasIndex("UserId");
 
                     b.ToTable("Projects");
                 });
@@ -117,8 +118,7 @@ namespace ProjectManage.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Desc")
-                        .HasColumnType("character varying(500)")
-                        .HasMaxLength(500);
+                        .HasColumnType("text");
 
                     b.Property<int>("ListTaskId")
                         .HasColumnType("integer");
@@ -155,44 +155,12 @@ namespace ProjectManage.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<string>("Avatar")
-                        .HasColumnType("text");
-
                     b.Property<string>("FullName")
                         .HasColumnType("text");
 
-                    b.Property<int?>("ProjectId1")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("ProjectId1");
-
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("ProjectManage.Models.UserProject", b =>
-                {
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.HasKey("UserId", "ProjectId");
-
-                    b.HasIndex("ProjectId");
-
-                    b.ToTable("UserProject");
                 });
 
             modelBuilder.Entity("ProjectManage.Models.ListTask", b =>
@@ -207,10 +175,8 @@ namespace ProjectManage.Migrations
             modelBuilder.Entity("ProjectManage.Models.Project", b =>
                 {
                     b.HasOne("ProjectManage.Models.User", "User")
-                        .WithOne("Project")
-                        .HasForeignKey("ProjectManage.Models.Project", "ManagerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Projects")
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("ProjectManage.Models.Task", b =>
@@ -230,28 +196,6 @@ namespace ProjectManage.Migrations
                     b.HasOne("ProjectManage.Models.User", "User")
                         .WithMany("Tasks")
                         .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("ProjectManage.Models.User", b =>
-                {
-                    b.HasOne("ProjectManage.Models.Project", null)
-                        .WithMany("Users")
-                        .HasForeignKey("ProjectId1");
-                });
-
-            modelBuilder.Entity("ProjectManage.Models.UserProject", b =>
-                {
-                    b.HasOne("ProjectManage.Models.Project", "Project")
-                        .WithMany("UserProjects")
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ProjectManage.Models.User", "User")
-                        .WithMany("UserProjects")
-                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

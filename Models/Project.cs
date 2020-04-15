@@ -11,10 +11,10 @@ namespace ProjectManage.Models
         [Key]
         public int Id { get; set; }
 
-        [MaxLength(255)]
-        [Required]
+        [MaxLength(255, ErrorMessage = "Tên dự án quá dài")]
+        [Required(ErrorMessage = "Vui lòng nhập tên dự án")]
         public string Name { get; set; }
-
+        public string Thumbnail{get;set;}
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
@@ -22,6 +22,7 @@ namespace ProjectManage.Models
            Foreign key for Users
          ==================================*/
 
+        [Required]
         public int ManagerId { get; set; }
 
         public User  User { get; set; }
@@ -29,11 +30,11 @@ namespace ProjectManage.Models
         /*==================================    
             Foreign key for Status
           ==================================*/
-
+        [Required]
         public int StatusId { get; set; }
         // public Status Status { get; set; }
-        // public ICollection<ListTask> ListTasks { get; set; }
-        // public ICollection<ApplicationUser> Users {get;set;}
-        // public ICollection<UserProject> UserProjects{get;set;}
+        public ICollection<ListTask> ListTasks { get; set; }
+        public ICollection<User> Users {get;set;}
+        public ICollection<UserProject> UserProjects{get;set;}
     }
 }

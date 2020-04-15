@@ -7,7 +7,10 @@ namespace ProjectManage.Models
     {
         public int Id{get;set;}
         public string FullName{get;set;}
-        
-        public ICollection<Project> Projects {get;set;}
+        public string Avatar{get;set;}
+        public Project Project {get;set;}
+        public ICollection<UserProject> UserProjects {get;set;}
+        public ICollection<Task> Tasks {get;set;}
+
     }    
 }
