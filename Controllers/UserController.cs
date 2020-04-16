@@ -81,8 +81,8 @@ namespace ProjectManage.Controllers
 
             if (result.Succeeded)
             {
-                await ctx.Users.AddAsync(model);
-                await ctx.SaveChangesAsync();
+                //await ctx.Users.AddAsync(model);
+                //await ctx.SaveChangesAsync();
                 return Ok(model);
             }
             return BadRequest("Thêm tài khoản thất bại");
@@ -101,16 +101,15 @@ namespace ProjectManage.Controllers
                 return BadRequest(errors);
             }
 
-            var found = await ctx.Users.FindAsync(id);
+            var found = await userManager.FindByIdAsync(id.ToString());
             if (found != null)
             {
                 
                 // found.Email = model.Email;
                 found.Avatar = model.Avatar;
                 found.FullName = model.FullName;
-                found.SecurityStamp = Guid.NewGuid().ToString();
+                //found.SecurityStamp = Guid.NewGuid().ToString();
                 var result = await userManager.UpdateAsync(found);
-                return Ok(result);
                 var token = await userManager.GeneratePasswordResetTokenAsync(found);
                 await userManager.ResetPasswordAsync(found, token, model.Password);
 
