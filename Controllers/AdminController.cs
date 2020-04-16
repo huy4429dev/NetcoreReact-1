@@ -36,7 +36,7 @@ namespace ProjectManage.Controlers
                 {
                     UserName = "admin",
                     Email = "club@gmail.com",
-                    FullName = "Administrator"
+                    FullName = "Administrator",
                 };
 
                 var result = await userManager.CreateAsync(user, "admin@123");

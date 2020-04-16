@@ -5,17 +5,24 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using ProjectManage.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace ProjectManage.Controllers
 {
     [Route("api/user")]
     public class UserController : ControllerBase
     {
-        private readonly ApplicationDbContext ctx;
 
-        public UserController(ApplicationDbContext ctx)
+        private readonly ApplicationDbContext ctx;
+        UserManager<ApplicationUser> userManager;
+        RoleManager<Role> roleManager;
+
+        public UserController(ApplicationDbContext ctx,
+                   UserManager<ApplicationUser> userManager, RoleManager<Role> roleManager)
         {
             this.ctx = ctx;
+            this.userManager = userManager;
+            this.roleManager = roleManager;
         }
 
         [HttpGet("{id}")]
@@ -61,14 +68,31 @@ namespace ProjectManage.Controllers
                 return BadRequest(errors);
             }
 
-            await ctx.Users.AddAsync(model);
-            await ctx.SaveChangesAsync();
-            return Ok(model);
+            var user = new ApplicationUser
+            {
+                FullName = model.FullName,
+                Email = model.Email,
+                Avatar = model.Avatar,
+                UserName = model.UserName,
+                Password = "hihihi",
+            };
+
+            var result = await userManager.CreateAsync(user, model.Password);
+
+            if (result.Succeeded)
+            {
+                await ctx.Users.AddAsync(model);
+                await ctx.SaveChangesAsync();
+                return Ok(model);
+            }
+            return BadRequest("Thêm tài khoản thất bại");
+
         }
 
-     [HttpPut("{id}")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> Edit(int id, [FromBody] ApplicationUser model)
         {
+
             if (!ModelState.IsValid)
             {
                 var errors = ModelState.Select(x => x.Value.Errors)
@@ -78,26 +102,40 @@ namespace ProjectManage.Controllers
             }
 
             var found = await ctx.Users.FindAsync(id);
-            if(found != null){
-                found.FullName = model.FullName;
+            if (found != null)
+            {
+                
+                // found.Email = model.Email;
                 found.Avatar = model.Avatar;
-                await ctx.SaveChangesAsync();
-                return Ok(found);
+                found.FullName = model.FullName;
+                found.SecurityStamp = Guid.NewGuid().ToString();
+                var result = await userManager.UpdateAsync(found);
+                return Ok(result);
+                var token = await userManager.GeneratePasswordResetTokenAsync(found);
+                await userManager.ResetPasswordAsync(found, token, model.Password);
+
+                if(result.Succeeded){
+                    return Ok(model);
+                }
+                return BadRequest("Cập nhật thông tin thất bại !");
+
             }
 
             return NotFound("Không tồn tại user");
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id){
+        public async Task<IActionResult> Delete(int id)
+        {
 
             var found = await ctx.Users.FindAsync(id);
-            if(found != null){
+            if (found != null)
+            {
                 ctx.Users.Remove(found);
                 await ctx.SaveChangesAsync();
-                return Ok(new{success = "Xóa user thành công"});
-            }    
-            
+                return Ok(new { success = "Xóa user thành công" });
+            }
+
             return NotFound();
         }
     }

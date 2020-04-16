@@ -12,6 +12,7 @@ namespace ProjectManage.Models
     {
         [MaxLength(50)]
         public string FullName { get; set; }
+        public string Password { get; set; }
         public string Avatar { get; set; }
         public Project Project { get; set; }
         public ICollection<UserProject> UserProjects { get; set; }
