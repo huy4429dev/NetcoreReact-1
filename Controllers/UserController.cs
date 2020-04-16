@@ -51,7 +51,7 @@ namespace ProjectManage.Controllers
 
         }
 
-        public async Task<IActionResult> Create([FromBody] User model)
+        public async Task<IActionResult> Create([FromBody] ApplicationUser model)
         {
             if (!ModelState.IsValid)
             {
@@ -67,7 +67,7 @@ namespace ProjectManage.Controllers
         }
 
      [HttpPut("{id}")]
-        public async Task<IActionResult> Edit(int id, [FromBody] User model)
+        public async Task<IActionResult> Edit(int id, [FromBody] ApplicationUser model)
         {
             if (!ModelState.IsValid)
             {

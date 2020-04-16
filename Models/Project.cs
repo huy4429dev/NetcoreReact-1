@@ -25,7 +25,7 @@ namespace ProjectManage.Models
         [Required]
         public int ManagerId { get; set; }
 
-        public User  User { get; set; }
+        public ApplicationUser  User { get; set; }
 
         /*==================================    
             Foreign key for Status
@@ -34,7 +34,7 @@ namespace ProjectManage.Models
         public int StatusId { get; set; }
         // public Status Status { get; set; }
         public ICollection<ListTask> ListTasks { get; set; }
-        public ICollection<User> Users {get;set;}
+        public ICollection<ApplicationUser> Users {get;set;}
         public ICollection<UserProject> UserProjects{get;set;}
     }
 }

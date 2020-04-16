@@ -1,9 +1,11 @@
+using System;
 using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -11,6 +13,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using ProjectManage.Data;
+using ProjectManage.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace ProjectManage
 {
@@ -30,6 +36,71 @@ namespace ProjectManage
 
             services.AddDbContext<ApplicationDbContext>(options =>
               options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddCors();
+
+
+            //==================== Add config password and username
+            IdentityBuilder builder = services.AddIdentityCore<ApplicationUser>(options =>
+                 {
+                     // Password settings
+                     options.Password.RequireDigit = false;
+                     options.Password.RequiredLength = 6;
+                     options.Password.RequireNonAlphanumeric = false;
+                     options.Password.RequireUppercase = false;
+                     options.Password.RequireLowercase = false;
+                     // User settings
+                     options.User.RequireUniqueEmail = true;
+                     // Lockout settings
+                     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+                     options.Lockout.MaxFailedAccessAttempts = 10;
+                 });
+
+            builder = new IdentityBuilder(builder.UserType, typeof(Role), builder.Services);
+
+            builder
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders()
+                .AddUserStore<ApplicationUserStore>()
+                .AddRoleStore<ApplicationRoleStore>()
+                .AddRoleValidator<RoleValidator<Role>>()
+                .AddRoleManager<RoleManager<Role>>()
+                .AddUserManager<UserManager<ApplicationUser>>()
+                .AddSignInManager<SignInManager<ApplicationUser>>();
+
+            var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Ngay xua co mot con ga..."));
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.SaveToken = true;
+                    options.RequireHttpsMetadata = false;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = signingKey,
+                        ValidateIssuer = true,
+                        ValidIssuer = "RS",
+                        ValidateAudience = true,
+                        ValidAudience = "RS",
+                        ValidateLifetime = true,
+                        ClockSkew = TimeSpan.Zero
+                    };
+                    // options.Events = new JwtBearerEvents
+                    // {
+                    //     OnMessageReceived = context =>
+                    //     {
+                    //         if (context.Request.Query.TryGetValue("access_token", out StringValues token))
+                    //         {
+                    //             context.Token = token;
+                    //         }
+
+                    //         return Task.CompletedTask;
+                    //     }
+                    // };
+                });
+
+            services.AddCors();
             services.AddControllersWithViews();
 
             // In production, the React files will be served from this directory
@@ -65,7 +136,12 @@ namespace ProjectManage
                 app.UseHsts();
             }
 
-
+            app.UseCors(builder =>
+                          builder.WithOrigins("http://localhost:3000")
+                              .AllowAnyHeader()
+                              .AllowAnyMethod()
+                              .AllowCredentials()
+                      );
 
             app.UseHttpsRedirection();
 
@@ -83,15 +159,21 @@ namespace ProjectManage
             });
 
 
-
             app.UseRouting();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller}/{action=Index}/{id?}");
-            });
+             {
+                 endpoints.MapControllerRoute(
+                     name: "token",
+                     pattern: "token",
+                     defaults: new { controller = "token", action = "token" });
+
+                 endpoints.MapControllerRoute(
+                     name: "default",
+                     pattern: "{controller}/{action=Index}/{id?}");
+             });
+
 
             app.UseSpa(spa =>
             {
