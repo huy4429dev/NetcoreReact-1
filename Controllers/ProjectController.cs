@@ -87,9 +87,10 @@ namespace ProjectManage.Controllers
 
 
             return Ok(model);
-        } 
+        }
 
         // put-edit newproject: api/Project/1
+
         [HttpPut("{id}")]
         public async Task<IActionResult> Edit(int id, [FromBody] Project model)
         {
@@ -138,8 +139,11 @@ namespace ProjectManage.Controllers
 
                 /* =========== 2 ==========*/
 
-                await _context.UserProject.AddRangeAsync(model.UserProjects);
-                await _context.SaveChangesAsync();
+                if (model.UserProjects.Count > 0)
+                {
+                    await _context.UserProject.AddRangeAsync(model.UserProjects);
+                    await _context.SaveChangesAsync();
+                }
 
                 return Ok(model);
 
