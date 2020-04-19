@@ -1,0 +1,37 @@
+export const API_ENDPOINT ='https://localhost:5001';
+export const URL_PROJECT = 'api/project';
+export const URL_UPLOAD_IMAGE_PROJECT = 'api/upload';
+
+export const API_METHOD_POST = 'POST';
+export const API_METHOD_GET = "GET";
+export const API_METHOD_DELETE = 'DELETE';
+export const API_METHOD_PUT = 'PUT';
+
+export const UPLOAD_IMAGE_PROJECT_SUCCESS ='UPLOAD_IMAGE_PROJECT_SUCCESS';
+export const UPLOAD_IMAGE_PROJECT_ERROR = 'UPLOAD_IMAGE_PROJECT_ERROR';
+
+export const ADD_PROJECT_SUCCESS ='ADD_PROJECT_SUCCESS';
+export const ADD_PROJECT_ERROR = 'ADD_PROJECT_ERROR';
+
+export const SHOW_FORM_ADD = 'SHOW_FORM_ADD';
+
+export const FETCH_PROJECT_SUCCESS ='FETCH_PROJECT_SUCCESS';
+export const FETCH_PROJECT_ERROR = 'FETCH_PROJECT_ERROR';
+
+// export const DELETE_USER_SUCCESS = 'DELETE_USER_SUCCESS';
+// export const DELETE_USER_ERROR = 'DELETE_USER_ERROR';
+
+// export const SHOW_FORM_EDIT = 'SHOW_FORM_EDIT';
+// export const SHOW_FORM_ADD_USER = 'SHOW_FORM_ADD_USER';
+
+// export const ADD_USER_SUCCESS = 'ADD_USER_SUCCESS';
+// export const ADD_USER_ERROR = 'ADD_USER_ERROR';
+
+// export const UPLOAD_IMAGE_USER_SUCCESS = 'UPLOAD_IMAGE_USER_SUCCESS';
+// export const UPLOAD_IMAGE_USER_ERROR = 'UPLOAD_IMAGE_USER_ERROR';
+
+// export const GET_VALUE_EDIT_USER = "GET_VALUE_EDIT_USER";
+// export const CLEAR_INPUT_USER = "CLEAR_INPUT_USER";
+
+// export const EDIT_USER_SUCCESS = 'EDIT_USER_SUCCESS';
+// export const EDIT_USER_ERROR = 'EDIT_USER_ERROR';
