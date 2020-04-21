@@ -58,3 +58,60 @@ export const fetchListsProject = () =>{
         onError:types.FETCH_PROJECT_ERROR
     }
 }
+
+export const showFormAddListTask = ()=>{
+    return {
+        type:types.SHOW_FORM_ADD_LISTASK
+    }
+}
+
+// show form add
+
+export const handleAddListTask = (listtask) =>{
+    return {
+        url:`${types.API_ENDPOINT}/${types.URL_LIST_TASK}`,
+        data:listtask,
+        method:types.API_METHOD_POST,
+        onSuccess:types.ADD_LIST_TASK_SUCCESS,
+        onError:types.ADD_LIST_TASK_ERROR
+    }
+}
+
+// add list task
+
+
+
+export const getListTask = (idproject) =>{
+    return {
+        url:`${types.API_ENDPOINT}/${types.URL_LIST_TASK}${idproject}`,
+        method:types.API_METHOD_GET,
+        onSuccess:types.GET_LIST_TASK_SUCCESS,
+        onError:types.GET_LIST_TASK_ERROR
+    }
+}
+
+// get list task
+
+
+export const hadleAddTask = (task) =>{
+    return {
+        url:`${types.API_ENDPOINT}/${types.URL_TASK}`,
+        data:task,
+        method:types.API_METHOD_POST,
+        onSuccess:types.ADD_TASK_SUCCESS,
+        onError:types.ADD_TASK_ERROR
+    }
+}
+
+// add task
+
+export const hadleGetTask = () =>{
+    return {
+        url:`${types.API_ENDPOINT}/${types.URL_TASK}`,
+        method:types.API_METHOD_GET,
+        onSuccess:types.GET_TASK_SUCCESS,
+        onError:types.GET_TASK_ERROR
+    }
+}
+
+// get task with list task id

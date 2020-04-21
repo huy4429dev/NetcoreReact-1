@@ -46,18 +46,18 @@ namespace ProjectManage.Controllers
                 query = query.Where(item => item.Name.ToLower().Contains(search.ToLower()));
             }
 
-             if (userId.HasValue)
+            if (userId.HasValue)
             {
-                _context.Projects.Where(p => p.UserProjects.Any(pu => pu.UserId == userId))
-                    .Select(p=>new{
-                        id = p.Id,
-                        name = p.Name,
-                        created = p.CreatedAt,
-                        updated = p.UpdatedAt,
-                        manerger = p.ManagerId,
-                        status = p.StatusId,
-                        userids = p.UserProjects.Select(du => du.UserId).ToList()
-                    });
+                // _context.Projects.Where(p => p.UserProjects.Any(pu => pu.UserId == userId))
+                //     .Select(p=>new{
+                //         id = p.Id,
+                //         name = p.Name,
+                //         created = p.CreatedAt,
+                //         updated = p.UpdatedAt,
+                //         manerger = p.ManagerId,
+                //         status = p.StatusId,
+                //         userids = p.UserProjects.Select(du => du.UserId).ToList()
+                //     });
 
                 var queryNew = (from u in _context.UserProject
                                 join p in _context.Projects on u.ProjectId equals p.Id
@@ -100,17 +100,18 @@ namespace ProjectManage.Controllers
             }
 
             /*==============================
-              Insert table Projects
+            Insert table Projects
             ==============================*/
 
             model.CreatedAt = DateTime.Now;
             model.UpdatedAt = DateTime.Now;
-            model.Status = ProjectStatus.Pending;
+            // model.Status = ProjectStatus.Pending;
+            model.StatusId = 1;
             await _context.Projects.AddAsync(model);
             await _context.SaveChangesAsync();
 
             /*==============================
-              Insert table UserProject
+            Insert table UserProject
             ==============================*/
 
             // foreach (var item in model.UserProjects)
@@ -131,8 +132,8 @@ namespace ProjectManage.Controllers
             if (!ModelState.IsValid)
             {
                 var errors = ModelState.Select(x => x.Value.Errors)
-                                   .Where(y => y.Count > 0)
-                                   .ToList();
+                                .Where(y => y.Count > 0)
+                                .ToList();
                 return BadRequest(errors);
             }
 

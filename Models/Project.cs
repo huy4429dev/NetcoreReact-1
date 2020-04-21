@@ -28,10 +28,11 @@ namespace ProjectManage.Models
 
         /*==================================    
             Foreign key for Status
-          ==================================*/
+        ==================================*/
         [Required]
-        public ProjectStatus Status { get; set; }
-        //public Status Status { get; set; }
+        // public ProjectStatus Status { get; set; }
+        public int StatusId {get;set;}
+        public Status Status { get; set; }
         public ICollection<ListTask> ListTasks { get; set; }
         //public ICollection<ApplicationUser> Users {get;set;}
         public ICollection<UserProject> UserProjects{get;set;}

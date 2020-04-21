@@ -7,14 +7,14 @@ const callAjax = store => next => action => {
     }
 }
 function processAjax(store, action){
-    const token = localStorage.getItem('login');
-    if(token.store){
+    // const token = localStorage.getItem('login');
+    // if(token){
         return fetch(action.url,{
             method:action.method,
             headers:{
-                "Content-Type":"application/json",
-                Accept: 'application/json',
-                'Authorization': `Bearer ${token }`
+                "Content-Type":"application/json"
+                // Accept: 'application/json',
+                // 'Authorization': `Bearer ${token}`
             },
             body: action.data ? JSON.stringify(action.data) : null
             
@@ -41,7 +41,6 @@ function processAjax(store, action){
             })
             return error;
         })
-    }
 }
 
 export default callAjax;

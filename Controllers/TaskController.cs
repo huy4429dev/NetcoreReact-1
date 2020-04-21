@@ -91,8 +91,8 @@ namespace ProjectManage.Controlers
             if (!ModelState.IsValid)
             {
                 var errors = ModelState.Select(x => x.Value.Errors)
-                                       .Where(y => y.Count > 0)
-                                       .ToList();
+                                    .Where(y => y.Count > 0)
+                                    .ToList();
                 return BadRequest(errors);
             }
 

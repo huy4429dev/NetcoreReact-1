@@ -28,11 +28,14 @@ class ModalAdd extends Component {
         e.preventDefault();
         const {nameproject} = this.state;
         const {src} =this.props;
+        const token =JSON.parse(localStorage.login);
+        const id = token.store.userId;
         const project = {
             name: nameproject,
             thumbnail: src,
-            managerId: 289
+            managerId: id
         }        
+        console.log(project);
         this.props.handleAddProject(project);
     }
     changeValue = e => {

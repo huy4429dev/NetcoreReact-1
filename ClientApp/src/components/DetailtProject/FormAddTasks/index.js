@@ -9,21 +9,55 @@ import CloseIcon from '@material-ui/icons/Close';
 import Button from '@material-ui/core/Button';
 
 class FormAddTasks extends Component {
+    constructor(props) {
+        super(props);
+        this.state={
+            title:'',
+            desc:'',
+        }
+    }
+    
+    onChang = (e) =>{
+        this.setState({
+            [e.target.name] : e.target.value
+        });
+    }
+    handleAddListTask = (e)=>{
+        e.preventDefault();
+        const { handleAddListTask } = this.props;
+        const {title,desc} = this.state;
+        const {match} = this.props;
+        const projectId = match.params.id;
+        const login = JSON.parse(localStorage.login);
+        const userid = login.store.userId;
+        const listtask = {
+            title: title,
+            desc: desc,
+            userId: userid,
+            projectId: projectId
+        } 
+        handleAddListTask(listtask);
+    }
     render() {
         const {classes} = this.props;
         return (
             <React.Fragment>
                 <Box>
                     <Card className={classes.cardAdd}>
-                        <CardContent>
-                            <Box>
-                                <input placeholder="Nhập tiêu đề danh sách..." className={classes.cardInput}/>
-                            </Box>
-                        </CardContent>
-                        <CardActions  display="flex">
-                            <Button size="small" className={classes.btnAddCard}>Thêm thẻ</Button>
-                            <CloseIcon className={classes.btnClose}/>
-                        </CardActions>
+                        <form onSubmit={this.handleAddListTask}>
+                            <CardContent>
+                                <Box>
+                                    <input onChange={this.onChang} name="title" placeholder="Nhập tiêu đề ..." className={classes.cardInput}/>
+                                </Box>
+                                <Box mt={1}>
+                                    <input onChange={this.onChang} name="desc" placeholder="Nhập mô tả ..." className={classes.cardInput}/>
+                                </Box>
+                            </CardContent>
+                            <CardActions  display="flex">
+                                <Button size="small" type="submit" className={classes.btnAddCard}>Thêm thẻ</Button>
+                                <CloseIcon className={classes.btnClose}/>
+                            </CardActions>
+                        </form>
                     </Card>
                 </Box>
             </React.Fragment>

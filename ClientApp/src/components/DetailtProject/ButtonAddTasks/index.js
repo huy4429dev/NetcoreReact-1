@@ -6,12 +6,16 @@ import Button from '@material-ui/core/Button';
 import styles from './style';
 
 class ButtonAddTasks extends Component {
+    showFormAddListTask = ()=>{
+        const {showFormAddListTask} = this.props;
+        showFormAddListTask();
+    }
     render() {
         const {classes} = this.props;
         return (
             <React.Fragment>
                 <Box>
-                    <Button  className={classes.buttonAdd}>
+                    <Button onClick={this.showFormAddListTask}  className={classes.buttonAdd}>
                         <AddIcon/>Thêm công việc mới
                     </Button>
                 </Box>

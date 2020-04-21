@@ -5,27 +5,59 @@ import Box from '@material-ui/core/Box';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
-import arrayMove from 'array-move';
 import ListTaskProject from './../../components/DetailtProject/ListTaskProject/index';
 import FormAddTasks from '../../components/DetailtProject/FormAddTasks';
 import ButtonAddTasks from '../../components/DetailtProject/ButtonAddTasks';
 import Header from '../../components/Header';
+import * as actions from './../../actions/project';
+import connect from './../../lib/connect';
+import ItemTaskProject from './../../components/DetailtProject/ItemTaskProject';
 
 class DetailtProject  extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            items: ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5','item6']
+
+    showListItemTask = (item,task)=>{
+        const {hadleAddTask} = this.props.actions;
+        var result = null;
+            if(item && task){
+                result = item.map((item,index)=>{
+                    console.log(task);
+                    const taskFiltered = task.filter(task=> task.listTaskId === item.id)
+                            return <ItemTaskProject item={item} 
+                            taskItem ={taskFiltered}
+                            key={index}
+                            hadleAddTask={hadleAddTask}
+                            />
+                })
+            }
+        return result;
+    }
+    showFormAddListTask = ()=>{
+        const {showFormAddListTask,match} = this.props;  
+        const {handleAddListTask} = this.props.actions;
+        if(showFormAddListTask){
+            return <FormAddTasks
+                    handleAddListTask={handleAddListTask}
+                    match={match}
+                    />
         }
     }
-    onSortEnd({oldIndex, newIndex}) {
-        this.setState({
-            items: arrayMove(this.state.items, oldIndex, newIndex),
-        });
+    showButtonAddTasks = ()=>{
+        const {showButtonAddTasks} = this.props;
+        const {showFormAddListTask} = this.props.actions;
+        if(showButtonAddTasks){
+            return <ButtonAddTasks 
+            showFormAddListTask = {showFormAddListTask} />
+        }
+    }
+    componentDidMount() {
+        const {match} = this.props;
+        const idproject = match.params.id
+        const {getListTask,hadleGetTask} = this.props.actions;
+        getListTask(idproject);
+        hadleGetTask();
     }
     render() {
-        const {classes,match,location,history} = this.props;
-        console.log('match',match);
+        const {classes,item,match,task} = this.props;
         return (
             <React.Fragment>
                 <Header/>
@@ -51,14 +83,25 @@ class DetailtProject  extends Component {
                         </Box>
                     </Box>
                     <Box>
-                        <ButtonAddTasks/>
-                        <FormAddTasks/>
-                        <ListTaskProject items={this.state.items} onSortEnd={this.onSortEnd.bind(this)}/>
+                        {this.showButtonAddTasks()}
+                        {this.showFormAddListTask()}
+                        <ListTaskProject>
+                            {this.showListItemTask(item,task)}
+                        </ListTaskProject>
+                        
                     </Box>
                 </Container>
             </React.Fragment>
         )
     }
+
 }
 
-export default withStyles(styles)(DetailtProject);
+export default withStyles(styles)(connect(DetailtProject, state => (
+    {
+        showFormAddListTask:state.projectReducer.showFormAddListTask,
+        showButtonAddTasks:state.projectReducer.showButtonAddTasks,
+        item :state.projectReducer.item,
+        task : state.projectReducer.task
+    }
+    ),actions));
