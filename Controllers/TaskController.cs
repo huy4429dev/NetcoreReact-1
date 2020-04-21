@@ -46,7 +46,7 @@ namespace ProjectManage.Controlers
                 {
                     ListTaskId = Convert.ToInt32(ListTaskId);
 
-                    query = query.Where(item => item.Title.ToLower().Contains(search.ToLower()) && item.ListTaskId == ListTaskId);
+                    query = query.Where(item => EF.Functions.ILike(item.Title, "%"+search+"%") && item.ListTaskId == ListTaskId);
                 }
             }
 

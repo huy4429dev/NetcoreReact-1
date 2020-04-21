@@ -31,7 +31,7 @@ namespace ProjectManage.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> GetAll(string search = null)
+        public async Task<IActionResult> GetAll(string search = null, int? projectId = null)
         {
             /*==============================
               Search List Task by Title
@@ -48,7 +48,13 @@ namespace ProjectManage.Controllers
               Get List Task
               ==============================*/
             // query = query.Where(item => item.Title.Contains(search));
+                 // query = query.Where(item => item.Title.Contains(search));
 
+            else if (projectId.HasValue)
+            {
+                projectId = Convert.ToInt32(projectId);
+                query = query.Where(item => item.ProjectId == projectId);
+            }
 
             var data = await query.ToListAsync();
             return Ok(data);

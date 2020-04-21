@@ -76,6 +76,7 @@ namespace ProjectManage.Data
 
             builder.Entity<UserProject>()
                 .HasKey(bc => new { bc.UserId, bc.ProjectId });
+                
             builder.Entity<UserProject>()
                 .HasOne(bc => bc.User)
                 .WithMany(b => b.UserProjects)

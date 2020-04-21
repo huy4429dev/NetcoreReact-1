@@ -92,7 +92,8 @@ namespace Netcore1.Controllers
             return Json(new
             {
                 access_token = encodedJwt,
-                expires_in = expires
+                expires_in = expires,
+                userId = user.Id
             });
         }
     }
