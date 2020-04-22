@@ -153,7 +153,6 @@ namespace ProjectManage.Migrations
                         .HasMaxLength(256);
 
                     b.Property<string>("Password")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("PasswordHash")
@@ -164,9 +163,6 @@ namespace ProjectManage.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("boolean");
-
-                    b.Property<int?>("ProjectId1")
-                        .HasColumnType("integer");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
@@ -186,8 +182,6 @@ namespace ProjectManage.Migrations
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
                         .HasName("UserNameIndex");
-
-                    b.HasIndex("ProjectId1");
 
                     b.ToTable("Users");
                 });
@@ -254,10 +248,14 @@ namespace ProjectManage.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp without time zone");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ManagerId")
-                        .IsUnique();
+                    b.HasIndex("StatusId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Projects");
                 });
@@ -438,13 +436,6 @@ namespace ProjectManage.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ProjectManage.Models.ApplicationUser", b =>
-                {
-                    b.HasOne("ProjectManage.Models.Project", null)
-                        .WithMany("Users")
-                        .HasForeignKey("ProjectId1");
-                });
-
             modelBuilder.Entity("ProjectManage.Models.ListTask", b =>
                 {
                     b.HasOne("ProjectManage.Models.Project", "Project")
@@ -456,11 +447,16 @@ namespace ProjectManage.Migrations
 
             modelBuilder.Entity("ProjectManage.Models.Project", b =>
                 {
-                    b.HasOne("ProjectManage.Models.ApplicationUser", "User")
-                        .WithOne("Project")
-                        .HasForeignKey("ProjectManage.Models.Project", "ManagerId")
+                    b.HasOne("ProjectManage.Models.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("ProjectManage.Models.ApplicationUser", "User")
+                        .WithMany("Projects")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("ProjectManage.Models.Task", b =>

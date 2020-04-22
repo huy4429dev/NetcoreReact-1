@@ -37,7 +37,7 @@ namespace ProjectManage.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll(string search = null)
+        public async Task<IActionResult> GetAll(string search = null, int? userId = null)
         {
 
             var query = _context.Projects.AsQueryable();
@@ -46,8 +46,41 @@ namespace ProjectManage.Controllers
                 query = query.Where(item => item.Name.ToLower().Contains(search.ToLower()));
             }
 
-            var data = await query.ToListAsync();
+            if (userId.HasValue)
+            {
+                // _context.Projects.Where(p => p.UserProjects.Any(pu => pu.UserId == userId))
+                //     .Select(p=>new{
+                //         id = p.Id,
+                //         name = p.Name,
+                //         created = p.CreatedAt,
+                //         updated = p.UpdatedAt,
+                //         manerger = p.ManagerId,
+                //         status = p.StatusId,
+                //         userids = p.UserProjects.Select(du => du.UserId).ToList()
+                //     });
 
+                var queryNew = (from u in _context.UserProject
+                                join p in _context.Projects on u.ProjectId equals p.Id
+                                join s in _context.Statuses on p.StatusId equals s.Id
+                                where u.UserId == userId
+                                select new
+                                {
+                                    id = p.Id,
+                                    name = p.Name,
+                                    created = p.CreatedAt,
+                                    updated = p.UpdatedAt,
+                                    manerger = p.ManagerId,
+                                    status = s.Name,
+                                    userid = u.UserId
+                                });
+                var dataNeW = await query.ToListAsync();
+                return Ok(dataNeW);
+
+            }
+
+
+            var data = await query.ToListAsync();
+    
             return Ok(data);
         }
 
@@ -67,16 +100,18 @@ namespace ProjectManage.Controllers
             }
 
             /*==============================
-              Insert table Projects
+            Insert table Projects
             ==============================*/
 
             model.CreatedAt = DateTime.Now;
             model.UpdatedAt = DateTime.Now;
+            // model.Status = ProjectStatus.Pending;
+            model.StatusId = 1;
             await _context.Projects.AddAsync(model);
             await _context.SaveChangesAsync();
 
             /*==============================
-              Insert table UserProject
+            Insert table UserProject
             ==============================*/
 
             // foreach (var item in model.UserProjects)
@@ -97,8 +132,8 @@ namespace ProjectManage.Controllers
             if (!ModelState.IsValid)
             {
                 var errors = ModelState.Select(x => x.Value.Errors)
-                                   .Where(y => y.Count > 0)
-                                   .ToList();
+                                .Where(y => y.Count > 0)
+                                .ToList();
                 return BadRequest(errors);
             }
 
@@ -109,8 +144,8 @@ namespace ProjectManage.Controllers
             {
 
                 /*==============================
-                  Update table Projects
-                  ==============================*/
+                    Update table Projects
+                    ==============================*/
 
                 found.Name = model.Name;
                 found.Thumbnail = model.Thumbnail;
@@ -119,10 +154,10 @@ namespace ProjectManage.Controllers
                 await _context.SaveChangesAsync();
 
                 /*==============================
-                  Update table UserProject
-                  1. Delete
-                  2. Insert
-                  ==============================*/
+                    Update table UserProject
+                    1. Delete
+                    2. Insert
+                    ==============================*/
 
                 /* =========== 1 ==========*/
 

@@ -39,10 +39,17 @@ namespace ProjectManage.Data
 
             //=== 1 - 1: User - Project <managerId>
 
-            builder.Entity<ApplicationUser>()
-                .HasOne(e => e.Project)
-                .WithOne(c => c.User)
-                .HasForeignKey<Project>(b => b.ManagerId)
+            // builder.Entity<ApplicationUser>()
+            //     .HasOne(e => e.Project)
+            //     .WithOne(c => c.User)
+            //     .HasForeignKey<Project>(b => b.ManagerId)
+            //     .OnDelete(DeleteBehavior.Cascade);
+
+            //=== 1 - n: User - Project <managerId>
+
+            builder.Entity<Project>()
+                .HasOne(e => e.User)
+                .WithMany(c => c.Projects)
                 .OnDelete(DeleteBehavior.Cascade);
 
 
@@ -76,6 +83,7 @@ namespace ProjectManage.Data
 
             builder.Entity<UserProject>()
                 .HasKey(bc => new { bc.UserId, bc.ProjectId });
+                
             builder.Entity<UserProject>()
                 .HasOne(bc => bc.User)
                 .WithMany(b => b.UserProjects)
