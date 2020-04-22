@@ -80,7 +80,7 @@ namespace ProjectManage.Controllers
 
 
             var data = await query.ToListAsync();
-      
+    
             return Ok(data);
         }
 
@@ -144,8 +144,8 @@ namespace ProjectManage.Controllers
             {
 
                 /*==============================
-                  Update table Projects
-                  ==============================*/
+                    Update table Projects
+                    ==============================*/
 
                 found.Name = model.Name;
                 found.Thumbnail = model.Thumbnail;
@@ -154,10 +154,10 @@ namespace ProjectManage.Controllers
                 await _context.SaveChangesAsync();
 
                 /*==============================
-                  Update table UserProject
-                  1. Delete
-                  2. Insert
-                  ==============================*/
+                    Update table UserProject
+                    1. Delete
+                    2. Insert
+                    ==============================*/
 
                 /* =========== 1 ==========*/
 

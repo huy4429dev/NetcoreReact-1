@@ -12,20 +12,24 @@ import Header from '../../components/Header';
 import * as actions from './../../actions/project';
 import connect from './../../lib/connect';
 import ItemTaskProject from './../../components/DetailtProject/ItemTaskProject';
+import FormAddTask from './../../components/DetailtProject/FormAddTask'
 
 class DetailtProject  extends Component {
 
-    showListItemTask = (item,task)=>{
+    showListItemTask = (item,task,showFormAddTask,showBtnAddTask)=>{
         const {hadleAddTask} = this.props.actions;
         var result = null;
+        const actShowFormAddTask = this.props.actions;
             if(item && task){
                 result = item.map((item,index)=>{
-                    console.log(task);
                     const taskFiltered = task.filter(task=> task.listTaskId === item.id)
                             return <ItemTaskProject item={item} 
                             taskItem ={taskFiltered}
                             key={index}
                             hadleAddTask={hadleAddTask}
+                            showFormAddTask={showFormAddTask}
+                            showBtnAddTask={showBtnAddTask}
+                            actShowFormAddTask={actShowFormAddTask}
                             />
                 })
             }
@@ -33,9 +37,10 @@ class DetailtProject  extends Component {
     }
     showFormAddListTask = ()=>{
         const {showFormAddListTask,match} = this.props;  
-        const {handleAddListTask} = this.props.actions;
+        const {handleAddListTask,hideFormAddLisTask} = this.props.actions;
         if(showFormAddListTask){
             return <FormAddTasks
+                    hideFormAddLisTask={hideFormAddLisTask}
                     handleAddListTask={handleAddListTask}
                     match={match}
                     />
@@ -57,7 +62,7 @@ class DetailtProject  extends Component {
         hadleGetTask();
     }
     render() {
-        const {classes,item,match,task} = this.props;
+        const {classes,item,task,showFormAddTask,showBtnAddTask} = this.props;
         return (
             <React.Fragment>
                 <Header/>
@@ -86,7 +91,7 @@ class DetailtProject  extends Component {
                         {this.showButtonAddTasks()}
                         {this.showFormAddListTask()}
                         <ListTaskProject>
-                            {this.showListItemTask(item,task)}
+                            {this.showListItemTask(item,task,showFormAddTask,showBtnAddTask)}
                         </ListTaskProject>
                         
                     </Box>
@@ -102,6 +107,8 @@ export default withStyles(styles)(connect(DetailtProject, state => (
         showFormAddListTask:state.projectReducer.showFormAddListTask,
         showButtonAddTasks:state.projectReducer.showButtonAddTasks,
         item :state.projectReducer.item,
-        task : state.projectReducer.task
+        task : state.projectReducer.task,
+        showFormAddTask: state.projectReducer.showFormAddTask,
+        showBtnAddTask:state.projectReducer.showBtnAddTask
     }
     ),actions));

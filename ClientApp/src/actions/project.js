@@ -115,3 +115,19 @@ export const hadleGetTask = () =>{
 }
 
 // get task with list task id
+
+export const hideFormAddLisTask = ()=>{
+    return {
+        type:types.HIDE_FORM_ADD_LISTASK
+    }
+}
+
+// hide form add list task
+
+export const actShowFormAddTask = ()=>{
+    return {
+        type:types.ACT_SHOW_FORM_ADD_TASK
+    }
+}
+
+// action show form add task

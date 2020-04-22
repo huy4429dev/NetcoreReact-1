@@ -1,17 +1,14 @@
 import React, { Component } from 'react'
-import { SortableElement} from 'react-sortable-hoc';
 import {withStyles} from '@material-ui/styles';
 import styles from './style';
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
-import AddIcon from '@material-ui/icons/Add';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import Grid from '@material-ui/core/Grid';
 import ItemTask from './../itemTask';
-import CloseIcon from '@material-ui/icons/Close';
+import FormAddTask from './../FormAddTask';
+import BtnAddTask from './../BtnAddTask';
 
 class ItemTaskProject extends Component {
     constructor(props) {
@@ -42,13 +39,25 @@ class ItemTaskProject extends Component {
     }
     showItemTask = (taskItem)=>{
         var result =null;
-            result =taskItem.map((task ,index)=>{
-                return <ItemTask key={index} task={task}/>
-            })
+            if(taskItem){
+                result = taskItem.map((task ,index)=> {
+                    return <ItemTask key={index} task={task}/>
+                })
+            }
         return result;
     }
+    showFormAddTask = (showFormAddTask)=>{
+        if(showFormAddTask){
+            return <FormAddTask actShowFormAddTask={actShowFormAddTask}/>
+        }
+    }
+    showBtnAddTask = (showBtnAddTask)=>{
+        if(showBtnAddTask){
+            return <BtnAddTask/>
+        }
+    }
     render() {
-        const {classes,item,taskItem} = this.props;    
+        const {classes,item,taskItem,showFormAddTask,showBtnAddTask,showFormAddTask} = this.props;  
         return (
             <React.Fragment>
                 <Grid item lg={3}>
@@ -60,17 +69,9 @@ class ItemTaskProject extends Component {
                                     <MoreHorizIcon className={classes.btnMore}/>
                                 </Box>
                             </CardContent>
-                            <form onSubmit={this.handleAddTask}>
-                                <input onChange={this.onChange}  name ="title" className={classes.addTask}/>
-                                    <CardActions  display="flex">
-                                            <Button size="small" type="submit" onClick={this.showAddForm} className={classes.btnAddCard}>Thêm thẻ</Button>
-                                            <CloseIcon className={classes.btnClose}/>
-                                    </CardActions>
-                            </form>
-                                {this.showItemTask(taskItem)}
-                            <CardActions>
-                                <Button size="small" type="submit"  className={classes.btnAdd}><AddIcon/>Thêm thẻ</Button>
-                            </CardActions>
+                            {this.showItemTask(taskItem)}
+                            {this.showFormAddTask(showFormAddTask,showFormAddTask)}
+                            {this.showBtnAddTask(showBtnAddTask)}
                         </Card>
                     </Box>
                 </Grid>

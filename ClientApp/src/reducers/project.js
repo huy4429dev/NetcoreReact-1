@@ -6,7 +6,9 @@ const initialState = {
     showFormAddListTask:false,
     showButtonAddTasks:true,
     item:null,
-    task:''
+    task:'',
+    showFormAddTask: false,
+    showBtnAddTask:true
 }
 const projectReducer =  (state = initialState, action) => {
     const {src} = action;
@@ -23,11 +25,11 @@ const projectReducer =  (state = initialState, action) => {
             
         case types.ADD_PROJECT_SUCCESS:
             alert('Add project success');
-            return {...state}
+            return {...state,showFormAdd:!state.showFormAdd}
 
         case types.ADD_PROJECT_ERROR:
             alert('Add project error');
-            return {...state}    
+            return {...state,showFormAdd:!state.showFormAdd}    
         
         case types.SHOW_FORM_ADD:
             return {
@@ -54,11 +56,15 @@ const projectReducer =  (state = initialState, action) => {
             alert('add list task success');
             return {
                 ...state,   
+                showFormAddListTask:!state.showFormAddListTask,
+                showButtonAddTasks:true    
             }     
         case types.ADD_LIST_TASK_ERROR:
             alert('add list task error');
             return {
-                ...state,   
+                ...state, 
+                showFormAddListTask:!state.showFormAddListTask,
+                showButtonAddTasks:true      
             }    
             
         case types.GET_LIST_TASK_SUCCESS:
@@ -92,6 +98,19 @@ const projectReducer =  (state = initialState, action) => {
         case types.GET_TASK_ERROR:
             return {
                 ...state,   
+            } 
+
+        case types.HIDE_FORM_ADD_LISTASK:
+            return {
+                ...state,
+                showFormAddListTask:false,
+                showButtonAddTasks:true   
+            } 
+
+        case types.ACT_SHOW_FORM_ADD_TASK:
+            alert('bam vao');
+            return {
+                ...state,
             } 
     default:
         return state

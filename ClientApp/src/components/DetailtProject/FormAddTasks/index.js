@@ -38,6 +38,9 @@ class FormAddTasks extends Component {
         } 
         handleAddListTask(listtask);
     }
+    hideFormAddLisTask = ()=>{
+        this.props.hideFormAddLisTask();
+    }
     render() {
         const {classes} = this.props;
         return (
@@ -55,7 +58,7 @@ class FormAddTasks extends Component {
                             </CardContent>
                             <CardActions  display="flex">
                                 <Button size="small" type="submit" className={classes.btnAddCard}>Thêm thẻ</Button>
-                                <CloseIcon className={classes.btnClose}/>
+                                <CloseIcon onClick={this.hideFormAddLisTask} className={classes.btnClose}/>
                             </CardActions>
                         </form>
                     </Card>

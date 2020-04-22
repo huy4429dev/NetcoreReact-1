@@ -3,12 +3,14 @@ import {withStyles} from '@material-ui/styles';
 import styles from './style';
 import CloseIcon from '@material-ui/icons/Close';
 import CardActions from '@material-ui/core/CardActions';
+import Button from '@material-ui/core/Button';
 
 class FormAddTask extends Component {
     showAddForm =()=>{
         this.props.showAddForm();
     }
     render() {
+        const {classes} = this.props;
         return (
             <React.Fragment>
                 <form onSubmit={this.handleAddTask}>
