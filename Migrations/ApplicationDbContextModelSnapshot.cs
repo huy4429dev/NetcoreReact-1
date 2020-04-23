@@ -248,14 +248,11 @@ namespace ProjectManage.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("StatusId");
+                    b.HasIndex("ManagerId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("StatusId");
 
                     b.ToTable("Projects");
                 });
@@ -447,16 +444,17 @@ namespace ProjectManage.Migrations
 
             modelBuilder.Entity("ProjectManage.Models.Project", b =>
                 {
+                    b.HasOne("ProjectManage.Models.ApplicationUser", "User")
+                        .WithMany("Projects")
+                        .HasForeignKey("ManagerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ProjectManage.Models.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("ProjectManage.Models.ApplicationUser", "User")
-                        .WithMany("Projects")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("ProjectManage.Models.Task", b =>

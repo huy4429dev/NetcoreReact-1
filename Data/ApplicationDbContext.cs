@@ -1,3 +1,5 @@
+using System;
+using System.Reflection.Emit;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -22,7 +24,7 @@ namespace ProjectManage.Data
         override protected void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            
+
             //========================================================================
 
             // Tên bảng cho các bảng identity
@@ -50,6 +52,7 @@ namespace ProjectManage.Data
             builder.Entity<Project>()
                 .HasOne(e => e.User)
                 .WithMany(c => c.Projects)
+                .HasForeignKey(c => c.ManagerId)
                 .OnDelete(DeleteBehavior.Cascade);
 
 
@@ -79,11 +82,11 @@ namespace ProjectManage.Data
                 .WithMany(c => c.Tasks)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            //=== n - n: User - Project
+            //=== n - n: Userproject - Project
 
             builder.Entity<UserProject>()
                 .HasKey(bc => new { bc.UserId, bc.ProjectId });
-                
+
             builder.Entity<UserProject>()
                 .HasOne(bc => bc.User)
                 .WithMany(b => b.UserProjects)
@@ -95,7 +98,10 @@ namespace ProjectManage.Data
                 .HasOne(bc => bc.Project)
                 .WithMany(c => c.UserProjects)
                 .HasForeignKey(bc => bc.ProjectId)
+
                 .OnDelete(DeleteBehavior.Cascade);
+
+          
 
 
 

@@ -39,11 +39,11 @@ namespace ProjectManage.Models
     }
 
 
-    public enum ProjectStatus:byte{
-        Pending = 0,
+  //  public enum ProjectStatus:byte{
+     //   Pending = 0,
 
-        Processing = 1,
+      //  Processing = 1,
 
-        Complete = 2
-    }
+   //     Complete = 2
+   // }
 }
