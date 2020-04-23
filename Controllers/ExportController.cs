@@ -24,7 +24,7 @@ namespace NetcoreReact_1_master.Controllers
             _hostingEnvironment = hostingEnvironment;
             _db = db;
         }
-    
+
         /// export cách 2
         [HttpGet]
         [Route("ExportProject")]
@@ -38,15 +38,16 @@ namespace NetcoreReact_1_master.Controllers
             using (var package = new ExcelPackage(stream))
             {
 
-        var query= _db.Projects
-        .Select(p=>new{
-            id=p.Id,
-            name=p.Name,
-            created=p.CreatedAt,
-            updated=p.UpdatedAt,
-            manerger=p.User.FullName,
-            status=p.Status.Name,
-        }).ToList();
+                var query = _db.Projects
+                .Select(p => new
+                {
+                    id = p.Id,
+                    name = p.Name,
+                    created = p.CreatedAt,
+                    updated = p.UpdatedAt,
+                    manerger = p.User.FullName,
+                    status = p.Status.Name,
+                }).ToList();
                 ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("newTable");
                 int totalRows = query.Count();
 
@@ -56,20 +57,20 @@ namespace NetcoreReact_1_master.Controllers
                 worksheet.Cells[1, 4].Value = " CREATED DATE ";
                 worksheet.Cells[1, 5].Value = " UPDATE DATE ";
                 worksheet.Cells[1, 6].Value = " MANERGER ";
-                worksheet.Cells[1, 7].Value =  " STATUS PROJECT ";
+                worksheet.Cells[1, 7].Value = " STATUS PROJECT ";
                 int i = 0;
-                int j=1;
+                int j = 1;
                 for (int row = 2; row <= totalRows + 1; row++)
                 {
                     worksheet.Cells[row, 1].Value = j;
                     worksheet.Cells[row, 2].Value = query[i].id;
                     worksheet.Cells[row, 3].Value = query[i].name;
                     worksheet.Cells[row, 4].Value = query[i].created.ToString();
-                    worksheet.Cells[row, 5].Value=  query[i].updated.ToString();
-                    worksheet.Cells[row, 6].Value= query[i].manerger;
-                     worksheet.Cells[row, 7].Value= query[i].status;
-                
-                              
+                    worksheet.Cells[row, 5].Value = query[i].updated.ToString();
+                    worksheet.Cells[row, 6].Value = query[i].manerger;
+                    worksheet.Cells[row, 7].Value = query[i].status;
+
+
                     i++;
                     j++;
                 }
