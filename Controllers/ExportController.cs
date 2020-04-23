@@ -38,28 +38,6 @@ namespace NetcoreReact_1_master.Controllers
             using (var package = new ExcelPackage(stream))
             {
 
-             /* IList<Project> ProjectList = _db.Projects.ToList();
-               List<User> UserList = _db.Users.
-               IList<Status>  Status= _db.Statuses.ToList();
-                 
-                var query= (from u in UserList
-                                join p in ProjectList on u.Id equals p.ManagerId
-                               
-                                join s in Status on p.StatusId equals s.Id
-
-                                
-                                select new
-                                {
-                                id= p.Id,
-                                name= p.Name,
-                                created=p.CreatedAt,
-                                updated= p.UpdatedAt,
-                                manerger=u.FullName,
-                                status= s.Name
-                                }).ToList();
-
-                               
-                     */
         var query= _db.Projects
         .Select(p=>new{
             id=p.Id,
