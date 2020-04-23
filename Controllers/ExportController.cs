@@ -47,9 +47,6 @@ namespace NetcoreReact_1_master.Controllers
             manerger=p.User.FullName,
             status=p.Status.Name,
         }).ToList();
-                               
-                
-
                 ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("newTable");
                 int totalRows = query.Count();
 
